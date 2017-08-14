@@ -6,29 +6,21 @@ import java.util.ArrayList;
 public class Task {
 
     private String description;
-    private static ArrayList<Task> instances = new ArrayList<>();
     private boolean completed;
     private LocalDateTime createdAt;
     private int id;
+    private int categoryId;
 
-    public Task(String description){
+
+    public Task(String description, int categoryId){
         this.description = description;
         this.completed = false;
         this.createdAt = LocalDateTime.now();
-        instances.add(this);
-        this.id = instances.size();
+        this.categoryId = categoryId;
     }
 
     public String getDescription() {
         return description;
-    }
-
-    public static ArrayList<Task> getAll(){
-        return instances;
-    }
-
-    public static void clearAllTasks(){
-        instances.clear();
     }
 
     public boolean getCompleted(){
@@ -43,15 +35,42 @@ public class Task {
         return id;
     }
 
-    public static Task findById(int id){
-        return instances.get(id-1); //why minus 1? See if you can figure it out.
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void update(String content) {
-        this.description = content;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public void deleteTask(){
-        instances.remove(id-1); //same reason
+    public void setDescription(String description) {
+        this.description = description;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Task task = (Task) o;
+
+        if (completed != task.completed) return false;
+        if (id != task.id) return false;
+        if (categoryId != task.categoryId) return false;
+        if (!description.equals(task.description)) return false;
+        return description.equals(task.description);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = description.hashCode();
+        result = 31 * result + (completed ? 1 : 0);
+        result = 31 * result + (createdAt != null ? createdAt.hashCode() : 0);
+        result = 31 * result + id;
+        result = 31 * result + categoryId;
+        return result;
     }
 }
